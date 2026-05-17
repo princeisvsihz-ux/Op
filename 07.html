@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, nandani! | 2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Space+Grotesk:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --card-bg: rgba(20, 20, 20, 0.7);
+            --accent: #ff0055;
+            --accent-glow: rgba(255, 0, 85, 0.5);
+            --text-main: #ffffff;
+            --text-dim: #a0a0a0;
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Only hide cursor on devices with mouse */
+        @media (pointer: fine) {
+            * { cursor: none; }
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- Password Lock Screen --- */
+        #lockscreen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .lock-box {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            padding: 3rem 2rem;
+            border-radius: 24px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .lock-box h2 {
+            font-family: 'Space Grotesk';
+            color: var(--accent);
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+        .lock-box input {
+            width: 100%;
+            padding: 1rem;
+            margin: 1.5rem 0 1rem;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+        }
+        .lock-box input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+        .lock-box button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Space Grotesk';
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .lock-box button:hover {
+            background: #fff;
+            color: #000;
+        }
+        #errorMsg {
+            color: var(--accent);
+            margin-top: 1rem;
+            height: 20px;
+            font-size: 0.9rem;
+        }
+        /* Hide main content when locked */
+        body.locked {
+            overflow: hidden;
+        }
+        body.locked > *:not(#lockscreen) {
+            display: none !important;
+        }
+
+        /* Custom Cursor */
+        #cursor {
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        #cursor-blur {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Background Noise/Grain */
+        .noise {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 10;
+            background-image: url('https://media.giphy.com/media/oEI9uWUicKgH6/giphy.gif');
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* --- Intro Section --- */
+        .hero-text {
+            font-family: 'Space Grotesk', sans-serif;
+            text-align: center;
+        }
+
+        .hero-text h1 {
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 900;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+        }
+
+        .hero-text .glitch {
+            color: var(--accent);
+            display: block;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            animation: bounce 2s infinite;
+        }
+
+        /* --- Bento Grid / The Roast --- */
+        .bento-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto;
+            gap: 1.5rem;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .bento-item {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 24px;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .bento-item:hover {
+            transform: scale(1.02);
+            border-color: var(--accent);
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+
+        .large { grid-column: span 2; grid-row: span 2; }
+        .tall { grid-row: span 2; }
+
+        .bento-item h3 {
+            font-family: 'Space Grotesk';
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        /* --- Message Section --- */
+        .message-box {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .reveal-text {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: 1s ease-out;
+        }
+
+        .visible {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
+        /* --- Final Reveal --- */
+        .final-btn {
+            background: var(--accent);
+            color: white;
+            padding: 1.5rem 3rem;
+            border-radius: 50px;
+            font-family: 'Space Grotesk';
+            font-weight: 700;
+            text-transform: uppercase;
+            border: none;
+            font-size: 1.2rem;
+            box-shadow: 0 10px 40px var(--accent-glow);
+            transition: 0.3s;
+        }
+
+        .final-btn:hover {
+            transform: translateY(-5px);
+            background: #fff;
+            color: #000;
+        }
+
+        /* Animations */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translate(0, 0px); }
+            50% { transform: translate(0, 15px); }
+            100% { transform: translate(0, -0px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .bento-container {
+                grid-template-columns: 1fr;
+            }
+            .large, .tall { grid-column: span 1; grid-row: span 1; }
+            #cursor, #cursor-blur { display: none; }
+        }
+
+        /* Overlay for the grand finale */
+        #confetti-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="locked">
+
+    <!-- PASSWORD LOCK OVERLAY -->
+    <div id="lockscreen">
+        <div class="lock-box">
+            <h2>ACCESS DENIED</h2>
+            <p>This page is locked. Enter the magic word.</p>
+            <input type="password" id="passInput" placeholder="Password" autocomplete="off">
+            <button onclick="checkPass()">Unlock</button>
+            <p id="errorMsg"></p>
+        </div>
+    </div>
+
+    <div id="cursor"></div>
+    <div id="cursor-blur"></div>
+    <div class="noise"></div>
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- SECTION 1: THE HOOK -->
+    <section>
+        <div class="hero-text">
+            <p style="letter-spacing: 5px; color: var(--accent); margin-bottom: 1rem;">ALERT: SYSTEM COMPROMISED</p>
+            <h1>ANOTHER YEAR<br><span class="glitch">OF YOU BEING</span><br>good sister.</h1>
+        </div>
+        <div class="scroll-indicator">Scroll to be roasted ↓</div>
+    </section>
+
+    <!-- SECTION 2: THE ROAST (BENTO GRID) -->
+    <section>
+        <div class="bento-container">
+            <div class="bento-item large">
+                <h3>Level 2026 Unlocked</h3>
+                <p>You've successfully survived another 365 days of being the most dramatic, annoying, made by bhiaya= sg & pg   </p>
+            </div>
+            <div class="card">
+<h2>Crime 🐶</h2>
+<p>Too cute + too annoying 😏 but still best ❤️</p>
+</div>
+
+<div class="card">
+<h2>Attitude 😎</h2>
+<p>100% savage 🔥</p>
+</div>
+
+<div class="card">
+<h2>Brain Cells 🧠</h2>
+<p>Only active for food 🍕😂</p>
+</div>
+
+<div class="card">
+<h2>Diagnosis 🩺</h2>
+<p>Kuttiya Syndrome 😂  
+Side effect: makes everyone happy ❤️</p>
+</div>
+
+<div class="card">
+<h2>Special Note 💌</h2>
+<p>Tu irritating hai but still my favorite ❤️😂</p>
+</div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: THE EMOTIONAL PIVOT -->
+    <section style="background: linear-gradient(to bottom, #050505, #1a000a);">
+        <div class="message-box">
+            <p class="reveal-text" id="emotional-msg">
+                In all seriousness... <br><br>
+                The world is a lot louder, messier, and infinitely more fun with you in it. 
+                You're the kind of "Kuttiya" everyone needs in their life but only I'm lucky enough to have,
+                 .
+                                            
+                <br><br>
+                <span style="color: var(--accent); font-weight: 700;">Happy Birthday, Drama Queen 👑  
+                                               .</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- SECTION 4: THE FINALE -->
+    <section>
+        <h2 style="font-family: 'Space Grotesk'; margin-bottom: 2rem; font-size: 3rem;">Ready for your gift?</h2>
+        <button class="final-btn" onclick="celebrate()">Don't Click This</button>
+    </section>
+
+    <script>
+        // Password Lock Logic
+        const correctPassword = "kuttiya";
+        
+        function checkPass() {
+            const input = document.getElementById('passInput').value;
+            const error = document.getElementById('errorMsg');
+            
+            if(input === correctPassword) {
+                document.getElementById('lockscreen').style.display = 'none';
+                document.body.classList.remove('locked');
+            } else {
+                error.textContent = "Wrong password, Kuttiya wannabe 😏";
+                document.getElementById('passInput').value = "";
+            }
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('passInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPass();
+        });
+
+        // Custom Cursor Logic
+        const cursor = document.getElementById('cursor');
+        const cursorBlur = document.getElementById('cursor-blur');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorBlur.style.left = e.clientX + 'px';
+            cursorBlur.style.top = e.clientY + 'px';
+        });
+
+        // Intersection Observer for Reveal Animations
+        const observerOptions = { threshold: 0.5 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        observer.observe(document.getElementById('emotional-msg'));
+
+        // Confetti Logic (Vanilla JS Canvas)
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let confettiAnimationId;
+
+        function celebrate() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            
+            for (let i = 0; i < 150; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 10 + 5,
+                    color: i % 2 === 0 ? '#ff0055' : '#ffffff',
+                    speed: Math.random() * 5 + 2,
+                    angle: Math.random() * 6.28
+                });
+            }
+            animateConfetti();
+            alert("Happy Birthday Kuttiya 🎉😂\nAb treat dena padega 😎🍕\n- SG & PG ❤️ and pay for me too🎉\n \n wan see a magic trick\n click on ok ");
+            
+            // Stop confetti after 6 seconds
+            setTimeout(() => {
+                cancelAnimationFrame(confettiAnimationId);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }, 6000);
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.y += p.speed;
+                p.x += Math.sin(p.angle) * 2;
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+            });
+            confettiAnimationId = requestAnimationFrame(animateConfetti);
+        }
+
+        // Parallax effect for bento items
+        document.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const bentoItems = document.querySelectorAll('.bento-item');
+            bentoItems.forEach((item, index) => {
+                const speed = (index + 1) * 0.05;
+                item.style.transform = `translateY(${scrolled * speed * -0.1}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
